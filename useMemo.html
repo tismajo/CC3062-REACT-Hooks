@@ -41,7 +41,7 @@
         }
 
         li {
-            background-color: #6e5864;
+            background-color: #8f5e4e;
             padding: 1rem;
             margin-bottom: 0.5rem;
             border-radius: 5px;
@@ -51,6 +51,20 @@
         strong {
             color: #59a5ac;
         }
+
+        button {
+            display: block;
+            margin: 1rem auto;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #8f5e4e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
     </style>
 </head>
 <body>
@@ -59,38 +73,71 @@
     <script type="text/babel">
         const { useState, useMemo } = React;
 
-        function SearchAnimeCharacter() {
-            const [search, setSearch] = useState("");
+        function AddCharacter({ characters, setCharacters }) {
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
 
-            const[characters, setCharacter] = useState([
-                { name: "Eren Jaeger", description: "Protagonista de la serie, busca vengarse de los titanes." },
-                { name: "Mikasa Ackerman", description: "De pequeña fue adoptada por la familia Jaeger debido a la muerte de sus padres." },
-                { name: "Armin Arlelt", description: "Mejor amigo de la infancia de Eren y Mikasa." },
-            ]);
-
-            const filterCharacters = useMemo(() => {
-                return characters.filter((char) =>
-                    (char.name).toLowerCase().includes(search.toLowerCase())
-                );
-            }, [search]);
-
-            return (
-                <div>
-                    <h1>Buscar personajes</h1>
-                    <input type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                    <ul>
-                        {filterCharacters.map((char, i) => (
-                            <li key={i}>
-                                <strong>{char.name}</strong>: {char.description}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            );
+    const handleAdd = () => {
+        if (name.trim() && description.trim()) {
+            setCharacters([...characters, { name, description }]);
+            setName("");
+            setDescription("");
         }
+    };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<SearchAnimeCharacter />);
+    return (
+        <div>
+            <h1>Añadir personaje</h1>
+            <input type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} />
+            <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <button onClick={handleAdd}>Agregar</button>
+        </div>
+    );
+}
+
+
+
+        function SearchAnimeCharacter({ characters }) {
+        const [search, setSearch] = useState("");
+
+        const filterCharacters = useMemo(() => {
+            return characters.filter((char) =>
+                (char.name).toLowerCase().includes(search.toLowerCase())
+            );
+        }, [search, characters]);
+
+        return (
+            <div>
+                <h1>Buscar personajes</h1>
+                <input type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)} />
+                <ul>
+                    {filterCharacters.map((char, i) => (
+                        <li key={i}>
+                            <strong>{char.name}</strong>: {char.description}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+
+    function App() {
+        const [characters, setCharacters] = useState([
+            { name: "Eren Jaeger", description: "Protagonista de la serie, busca vengarse de los titanes." },
+            { name: "Mikasa Ackerman", description: "De pequeña fue adoptada por la familia Jaeger debido a la muerte de sus padres." },
+            { name: "Armin Arlelt", description: "Mejor amigo de la infancia de Eren y Mikasa." },
+        ]);
+
+        return (
+            <div>
+                <AddCharacter characters={characters} setCharacters={setCharacters} />
+                <SearchAnimeCharacter characters={characters} />
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
     </script>
 </body>
 </html>
