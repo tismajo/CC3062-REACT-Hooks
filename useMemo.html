@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Use Memo</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            background-color: #42694a;
+            font-family: Arial, sans-serif;
+            color: #f0f0f0;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 2px solid #59a5ac;
+            border-radius: 5px;
+            background-color: #fff;
+            color: black;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #6e5864;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        strong {
+            color: #59a5ac;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        function SearchAnimeCharacter() {
+            const [search, setSearch] = useState("");
+
+            const[characters, setCharacter] = useState([
+                { name: "Eren Jaeger", description: "Protagonista de la serie, busca vengarse de los titanes." },
+                { name: "Mikasa Ackerman", description: "De pequeña fue adoptada por la familia Jaeger debido a la muerte de sus padres." },
+                { name: "Armin Arlelt", description: "Mejor amigo de la infancia de Eren y Mikasa." },
+            ]);
+
+            const filterCharacters = useMemo(() => {
+                return characters.filter((char) =>
+                    (char.name).toLowerCase().includes(search.toLowerCase())
+                );
+            }, [search]);
+
+            return (
+                <div>
+                    <h1>Buscar personajes</h1>
+                    <input type="text" placeholder="Buscar..." value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <ul>
+                        {filterCharacters.map((char, i) => (
+                            <li key={i}>
+                                <strong>{char.name}</strong>: {char.description}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SearchAnimeCharacter />);
+    </script>
+</body>
+</html>
