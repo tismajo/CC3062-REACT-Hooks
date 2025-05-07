@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #a3d6e0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+    
+        #root {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    
+        h2 {
+            color: #f1a7c6;
+            margin-bottom: 10px;
+        }
+    
+        button {
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+    
+        /* Estilo específico para cada botón */
+        button:nth-of-type(1) {
+            background-color: #f6cbcb;
+            color: #333;
+        }
+    
+        button:nth-of-type(1):hover {
+            background-color: #e5b5b5;
+        }
+    
+        button:nth-of-type(2) {
+            background-color: #f9e690;
+            color: #333;
+        }
+    
+        button:nth-of-type(2):hover {
+            background-color: #e6d27f;
+        }
+    
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+    </style>    
+    <title>Use Callback</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useCallback, useState } = React;
+
+        function createRandomNum() {
+            return Math.floor(Math.random()* 10 + 1);
+        }
+
+        function ButtonOptimizado({ onClick, label }) {
+            return <button onClick={onClick}>{label}</button>;
+        }
+
+        function ButtonNormal({ onClick, label }) {
+            return <button onClick={onClick}>{label}</button>;
+        }
+
+        function CartaElementos() {
+            const [randomNumber, setRandomNumber] = useState(0);
+            const [counter, setCounter] = useState(0);
+
+            const createRandom = useCallback(() => {
+                const num = createRandomNum();
+                setRandomNumber(num);
+            }, []);
+
+            const addCounter = () => {
+                setCounter(prev => prev + 1);
+            };
+
+            return (
+                <div>
+                    <h2>Número de carta: {randomNumber}</h2>
+                    <h2>Contador: {counter}</h2>
+                    <ButtonOptimizado onClick={createRandom} label="Crear aleatorio" />
+                    <ButtonNormal onClick={addCounter} label="Sumar al contador" /> <br/>
+                    <img src={`img/${randomNumber}.png`} alt={`Imagen ${randomNumber}`} />
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<CartaElementos />);
+    </script>
+</body>
+</html>
