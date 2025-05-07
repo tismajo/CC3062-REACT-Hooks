@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>    
+    <title>Use Context</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useContext, createContext } = React;
+
+        const ThemeContext = createContext();
+
+        function ThemeProvider({ children }) {
+            const [isDark, setDarkTheme] = useState(false);
+            
+            const toggleTheme = () => {
+                setDarkTheme(prev => !prev);
+            };
+
+            return (
+                <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+                    {children}
+                </ThemeContext.Provider>
+            );
+        }
+
+        function ThemeToggle() {
+            const { isDark, toggleTheme } = useContext(ThemeContext);
+            return <button onClick={toggleTheme}>{isDark ? "Haz de día" : "Haz de noche"}</button>;
+        }
+
+        function ThemeWrapper({ children }) {
+            const { isDark } = useContext(ThemeContext);
+            const style = {
+                backgroundColor: isDark ? "black" : "white",
+                color: isDark ? "white" : "black",
+                minHeight: "100vh",
+                padding: "2rem",
+                transition: "all 0.3s ease"
+            };
+            return <div style={style}>{children}</div>;
+        }
+
+        function App() {
+            return (
+                <ThemeProvider>
+                    <ThemeWrapper>
+                        <h1>Cambio de tema</h1>
+                        <ThemeToggle />
+                    </ThemeWrapper>
+                </ThemeProvider>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
