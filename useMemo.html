@@ -74,28 +74,26 @@
         const { useState, useMemo } = React;
 
         function AddCharacter({ characters, setCharacters }) {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
+            const [name, setName] = useState("");
+            const [description, setDescription] = useState("");
 
-    const handleAdd = () => {
-        if (name.trim() && description.trim()) {
-            setCharacters([...characters, { name, description }]);
-            setName("");
-            setDescription("");
+            const handleAdd = () => {
+                if (name.trim() && description.trim()) {
+                    setCharacters([...characters, { name, description }]);
+                    setName("");
+                    setDescription("");
+                }
+            };
+
+            return (
+                <div>
+                    <h1>Añadir personaje</h1>
+                    <input type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} require />
+                    <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)} require />
+                    <button onClick={handleAdd}>Agregar</button>
+                </div>
+            );
         }
-    };
-
-    return (
-        <div>
-            <h1>Añadir personaje</h1>
-            <input type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} />
-            <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)} />
-            <button onClick={handleAdd}>Agregar</button>
-        </div>
-    );
-}
-
-
 
         function SearchAnimeCharacter({ characters }) {
         const [search, setSearch] = useState("");

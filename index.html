@@ -19,14 +19,6 @@
             margin: auto;
         }
 
-        article {
-            background-color: #ffe4ec;
-            border: 2px solid #d63384;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
         ul {
             list-style-type: none;
             padding-left: 0;
@@ -44,10 +36,6 @@
             transition: color 0.3s ease;
         }
 
-        a:hover {
-            color: #a61c5e;
-        }
-
         footer {
             text-align: center;
             padding: 1rem;
@@ -62,6 +50,17 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        li a {
+            display: block;
+            padding: 1rem;
+            border: 2px solid #d63384;
+            border-radius: 8px;
+            background-color: #ffe4ec;
+            margin: 0.5rem auto;
+            max-width: 300px;
+        }
+
     </style>
 </head>
 <body>
@@ -70,6 +69,9 @@
             <ul>
                 <li>
                     <a href="useMemo.html">Use Memo</a>
+                </li>
+                <li>
+                    <a href="useRef.html">Use Ref</a>
                 </li>
             </ul>
         </article>

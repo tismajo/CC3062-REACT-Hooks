@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Use Ref</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useRef, useEffect, useState } = React;
+
+        function formatTime(time) {
+        return `${time} segundos`;
+        }
+
+        function handleToggle(running, setRunning) {
+        setRunning(!running);
+        }
+
+        function handleReset(setRunning, setTime) {
+        setRunning(false);
+        setTime(0);
+        }
+
+        function handleSaveSession(time, setSessions) {
+        setSessions(prev => [...prev, time]);
+        }
+
+        function StopWatch() {
+            const [time, setTime] = useState(0);
+            const [running, setRunning] = useState(false);
+            const [sessions, setSessions] = useState([]);
+            const intervalRef = useRef(null);
+
+            useEffect(() => {
+                if (running) {
+                intervalRef.current = setInterval(() => {
+                    setTime(t => t + 1);
+                }, 1000);
+                }
+
+                return () => clearInterval(intervalRef.current);
+            }, [running]);
+
+            return (
+                <div>
+                <h1>{time} segundos</h1>
+                <button onClick={() => handleToggle(running, setRunning)}>
+                    {running ? 'Pausar' : 'Iniciar'}
+                </button>
+                <button onClick={() => handleReset(setRunning, setTime)}>
+                    Reiniciar
+                </button>
+                <button onClick={() => handleSaveSession(time, setSessions)}>
+                    Guardar sesión
+                </button>
+
+                <ul>
+                    {sessions.map((session, index) => (
+                    <li key={index}>
+                        Sesión #{index + 1}: {session} segundos
+                    </li>
+                    ))}
+                </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<StopWatch />);
+        </script>
+</body>
+</html>
